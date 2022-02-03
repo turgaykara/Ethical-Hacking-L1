@@ -1,0 +1,48 @@
+date -s "JAN 17 2022 09:29:15"
+
+setxkbmap tr
+
+cd Downloads/
+ls
+openvpn ...
+username: vpnbook
+password: 8shx95n
+ctrl + c = sonlandır.
+
+
+wificard:
+monitör moda geçmek için;
+airmon-ng start wlan1
+
+
+managed moda geçmek için;
+airmon-ng stop wlan1mon
+
+
+ZENMAP açma komutu
+nix run -f channel:nixos-unstable nmap_graphical
+sonra da zenmap yazarak giriyoruz.
+
+
+prepend domain-name-servers 8.8.8.8, 8.8.4.4;
+apt-get update :  gerekli güncellemeleri yapar.
+apt-get upgrade : üst versiyona taşır.(fazla zaman alır.)
+
+
+
+pwd : 	güncel olarak hangi klasörde olduğunu gösterir.
+ls : 	klasör içeriğini gösterir.
+mkdir : yeni bir klasör oluşturur.
+cd : 	gitmek istediğimiz klasöre girer.-> cd Desktop/
+cd .. : bir önce girdiğimiz klasörü açmak için kullanılır.
+
+
+VPN = Virtual Privacy Network > ip adresinizi değiştirir.
+DNS = Domain Name Server > Herhangi bir siteye girdigiğimizde; ip adresini çözümleyen ve o siteye yönlendiren sisteme denir.
+DNS de değiştirilebilir. (internet sağlayıcım hangi sitelere girdiğimi bilmesin.)
+
+
+ping google.com = yazılan sitenin ip adresini görüntüleyebiliriz.
+
+
+darkwebe girmek için = Tor -> search for Hidden Wiki

@@ -1,0 +1,66 @@
+	TAKE OVER COMPUTERS
+<Terminal>
+nix run -f channel:nixos-unstable nmap_graphical
+zenmap (açık bulurken zenmapteki yeşil kısımlar bizi ilgilendiriyor.)
+
+NOT: FireFox'umuza 10.0.2.4 yazarsak, bizi metaspolitable'a yönlendirir.
+
+
+
+
+
+	VERSİYON AÇIĞI
+ Target yazan yere metasploitable'mızın adresiniz yazıyoruz. (10.0.2.4)
+ Profile yazan yere ne taraması yapacağımızı giriyoruz.
+ En küçükten en yükseğe doğru gidelim.
+ Versiyonlar önemlidir çünkü, spesifik bir versiyonda açık olduğunu biliyorsak onu burada kullanabiliriz.
+
+ Ping scan seçip "Scan"e tıkladığımız anda taramaya başlar.
+ Quick scan plus (Ping scan'e göre daha detaylı.)
+ Intense scan (Quick scan plus'a göre daha detaylı.)
+
+ Bu tarama sonuçlarını rapor okur gibi incelememiz gerekiyor.
+ Versiyonu bulalım. (vsftpd 2.3.4) -> Bunda açık var mı araştıralım.
+ Firefox'ta "vsftpd 2.3.4 exploit" diye aratalım ve rapid7.com uzantılı siteye girelim.
+ Burada site bize versiyonun açığını gösteriyor.
+ Module Options yazan başlığı bulup backdoor yazan yeri kopyalayalım. (exploit/unix/ftp/vsftpd_234_backdoor)
+
+ <Terminale> cd /usr/share/ yaptıktan sonra "msfconsole" yazarsak "metasploite"u açar.
+ metasploite içerisine "use" komutunu kullanarak kopyaladığımız versiyon açığını yapıştıralım. (use exploit/unix/ftp/vsftpd_234_backdoor)
+ açılan yere "show options" yazıyoruz. ('versiyon açığının ayarlarını göster.')
+ options içerisine hedefimizin ip adresini giriyoruz. (biz sanal server üzerinden yaptığımız için metaspoliteable'ımızın ip adresini giriyoruz.)
+ eğer bir ayar değiştirmek istiyorsak 'set' komutunu kullanırız. -> "set RHOSTS 10.0.2.4"
+
+ Bu ayarları değiştirdikten sonra metaspolite içerisine "exploit" yazarsak hedef bilgisayarı (metasploitable'ı) hacklemiş oluruz.
+ Bilgisayarın içine girdikten sonra "uname -a" komutunu yazarsak içinde bulunduğumuz sistemi gösterir.
+ "whoami" komutu kim olduğumuzu söyler. (root vs.)
+ Şuandan itibaren Terminal komutları ile bilgisayarı kurcalayabiliriz.
+ "exit" ile de çıkış yapabiliriz.
+
+
+  ÖZET:
+  ZENMAP üzerinden hedef bilgisayarımızın ip'sini tarattık.
+ Tarama sonuçlarında bulunan versiyon açığını Firefox üzerinden araştırdık.
+ Açığı bulduk ve "msfconsole" yazarak girdiğimiz "metasploit" üzerinden bulduğumuz açığı "use" komutu kullanarak girdik.
+ "show options" ile ayarları gördük ve değiştirmek için "set" komutunu kullandık. Bulduğumuz açığın ayarlarını değiştirdikten sonra,
+ "exploit" komutunu kullanarak hedef bilgisayarımızı Hackledik. :)
+
+
+
+
+	KULLANICI ADI AÇIĞI
+<Terminal>
+nix run -f channel:nixos-unstable nmap_graphical
+zenmap
+
+ Neredeyse aynısı fakat bu sefer versiyonu değil "kullanıcı adını" (Samba smbd 3.X - 4.X) sonuna "exploit" ekleyerek araştırmamız gerekiyor.
+
+
+
+
+	VERİTABANI AÇIĞI
+<Terminal>
+nix run -f channel:nixos-unstable nmap_graphical
+zenmap
+
+ Neredeyse aynısı fakat bu sefer versiyonu değil "veri tabanını" (PostgreSQL DB 8.3.0 - 8.3.7) sonuna "exploit" ekleyerek araştırmamız gerekiyor.

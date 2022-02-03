@@ -1,0 +1,61 @@
+	DATA COLLECTION
+  Metasploitable'a Giriş Yapmak
+ Metasploitable -> Kullanıcı Adı: msfadmin, Password: msfadmin
+ Metasploitable Sanal Makinemizi açtıktan sonra:
+ Metasploitable üzerindeki websitesi açıklarını kullanacağız.
+ Firefox -> 10.0.2.4 : metasploitable dashboard'ına giriş yaptık.
+
+
+
+	Continue DC.
+ Maltego -> Groups -> Website
+ Bilgisini toplamak istediğimiz websitesini giriyoruz. (www.travelersgifts.com)
+ Maltegodan başka alternatif olarak interneti de kullanabiliriz. [website information gathering]
+
+ http://securityidiots.com/Web-Pentest/Information-Gathering/Part-1-information-Gathering-with-websites.html
+ Maltego aracılığı ile bulamadığımız bilgileri buradan toplayabiliriz.
+ 
+ Netcraft -> Data Collection
+ Bilgisini toplamak istediğimiz websitesini giriyoruz.
+ Buralarda toplağımız önemli bilgileri bir yere not almamız gerekiyor.
+
+ YouGetSignal veya Viewdns -> Reverse IP Domain Check	[https://viewdns.info/reverseip/]
+ Aynı sunucuda birden fazla websitesi var, 
+ Bu websitelerinden birini hackleyebilirsek bilgisayarına erişim sağlayabiliriz,
+ Bu da diğer tüm websitelerine erişim sağlamamız demektir.
+ 
+ Bunların dışında bing.com üzerinden de ip sorgusu yapabiliriz. [ip: 107.180.51.21]
+
+ Archive > https://archive.org/ < internette websitelerin daha önceki hallerini arşivleyen bir websitesidir.
+
+ Search for "whois lookup"	-> Kayıt verileri arama aracı
+ ICANN Lookup işimize yarayacaktır. -> Registration data lookup tool
+
+
+
+
+  ROBOTS
+ Terminal
+dirb http://10.0.2.4/mutillidae/	-> Verilen adres hakkında bilgi toplamak için kullanılan bir Framework
+http://10.0.2.4/mutillidae/robots.txt	-> Adminler kullanıcının görmesini istemediği bilgileri bu txt'nin içine koyarlar.
+					-> Peki, neden? > Google siteleri indexlemeye çalışır,
+					-> adminler ise indexlemesini istemediği dosyaları robots.txt'ye Disallow: Şeklinde koyarlar.
+					-> Bu sebeple robots.txt'de ne yazdığını bilmemiz önemlidir.
+http://10.0.2.4/mutillidae/passwords/	-> O Sitenin sonuna robots.txt'de erişimini istediğimiz Disallow'u örnekteki gibi yazarak erişim sağlayabiliriz.
+
+
+
+  SUBDOMAIN Bulma
+ Birçok Web sitesi, testlerini bu subdomainler üstünde yapmaktadır.
+ Web sitesi üzerinden bulamadığımız açıkları subdomain üzerinden bulabiliriz.
+ Web sitesi üzerine kurdukları güvenlik sistemlerini subdomainlerine kurmayabilirler.
+ Bu subdomain'i ele geçirebilirsek o websitesini hackleyebiliriz.
+cd ..
+cd opt/
+cd subbrute/
+python3 subbrute.py unicornitems.com	-> Yazılan site için olan tüm subdomainleri listeler.
+
+
+
+ NOT: Nmap de kullanabileceğimiz bir alternatif:
+ Açık olan portları, versiyonlar açıklarını bize gösteriyor.

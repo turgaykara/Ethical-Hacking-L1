@@ -1,0 +1,24 @@
+	SQL KODLARI
+SELECT * FROM demo;							-> demo içerisindeki her şeyi seç
+
+INSERT INTO demo (id, name, hint) VALUES (21, "Turgay", "Cyber");	-> Yeni bir sütun yarattık. 21.Sütun, Name:Turgay, Hint:Cyber
+
+DELETE FROM demo WHERE name = "Turgay";					-> İsmi Turgay olan değerleri bul ve sil. [id veya hint de olabilirdi.]
+
+UPDATE demo SET id = 18 WHERE name = "Turgay";				-> İsmi Turgay olan sütun ID'sini 18 olarak ayarla.
+
+SELECT * FROM demo WHERE name = "Turgay";				-> Sadece ismi Turgay olan sütunu getirecektir.
+									-> Sitede bir SQL Açığı bulabilirsek bu kodları rahatlıkla çalıştırabilirdik.
+									-> SELECT * FROM demo WHERE name = "admin";
+
+SELECT * FROM demo WHERE name LIKE "S%";				-> "S%" = S ile başlayan tüm değerleri göster.
+									-> "%S" = S ile biten tüm değerleri göster.
+
+
+
+
+
+
+
+
+

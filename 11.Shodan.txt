@@ -1,0 +1,46 @@
+	SHODAN
+  shodan.io/
+  Username: Elliot A.
+ İnternet kullanan bir servis çalıştıran objelerin ip adreslerinin üstünde çalıştırdığı portları 
+ tagleyen ve kategorize eden IOT Odaklı, Uydu, Webcam servislerini tagleyen bir arama motorudur.
+
+
+
+
+  Webcam Görüntüleme
+ Sitede "webcams" diye aratırsak o anda aktif olan webcamlerin listesini gösterecektir.
+ Herhangi birinin ip'sini kopyalayıp :'den sonra port girip görüntüleyebilirsiniz.
+ 99.192.163.187:80	-> Bu bizi o webcam'in servisine götürecektir.
+
+
+
+
+
+  Filtreleme Yapmak
+ vsat					-> Uyduları aramak için kullanırız.
+ vsat port:80				-> Port 80 çalıştıran web'e bir şekilde çıkış yapan uyduları gösterir.
+ port:22 country:"FR"			-> Fransada çalıştırılan ssh servislerini gösterir.
+ port:22 country:"FR city:"Paris"	-> Fransa/Pariste çalıştırılan ssh servislerini gösterir.
+
+
+
+
+  Zafiyet Olan Servisleri Bulmak
+ Güvenlik açığı olan Servisler ve Sistemler:
+ os:"Windows XP" country:"TR"	-> Bir çok açık olduğu için windows xp diye filtre koyduk.
+ vsftpd 2.3.4			-> Bu FTP Servisinde güvenlik açığı var.
+ apache 2.2.3			-> Açık olan bir servis.
+
+
+
+
+  Terminalden Shodan Çalıştırmak (benzeri tool: nmap)
+pip install shodan
+apt-get update
+shodan init AlIh30OAfcf8DLglm8vrM9l3ZxZkl7um	-> API Key/shodan.io <- Bu komut Shodan'i başlatacaktır.
+
+ Herhangi bir sitenin ip adresini öğrenmek için:
+ping <site adress>
+
+ Herhangi bir ip'nin host bilgilerini almak için:
+shodan host 107.180.51.21

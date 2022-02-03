@@ -1,0 +1,31 @@
+	SOCIAL MEDIA HACKING
+  BRUTE FORCE (Wordlist Tekniği)
+ Genelde işe yarayan bir yöntem değildir, sosyal medya hesapları hacklemek için genellikle sosyal mühendislik yapılır.
+ İnternet tarayıcımızda "instagram hack brute force github" diye aratırsak karşımıza bir çok tool çıkacaktır.
+ Bu toollar genellikle çalışmaz o sebeple kendimiz bir tool yaratmamız gerekecek.
+
+cd Downloads/
+cd Instagram-/
+ Öncelikle şifre denememiz için wordlist oluşturmamız gerekiyor hazır wordlist'iniz varsa kullanabilirsiniz. 
+ veya crunch 7 8 xy123 -o instawordlist şeklinde kendi wordlistinizi oluşturabilirsiniz.
+python instagram.py turgay.kr instawordlist 10	-> Saniyede 10 defa şifre dene. (sayı ne kadar büyük olursa instagram tarafından banlanma ihtimali de o kadar fazla olur.)
+		    Hesap adı, WordList
+ işe yaramazsa bunu dene -> python3 instagram.py turgay.kr instawordlist 10
+
+
+
+  PHISHING (Oltalama Tekniği)
+ Kullanıcının, kullanıcı adı ve şifresini giriş yapabileceği instagrama benzer bir arayüz, web sitesi yapmamız gerekiyor.
+ Kullanıcı'nın bilgileri alındıktan sonra bunları kaydeder ve kullanıcıyı sanki hiçbir şey olmamış gibi instagram.com'a yönlendirir.
+ Web sitesi yapmak için 000webhost.com'u kullanacağız.
+ /root/Downloads/Instagram Phishing Script/ içerisindeki index.html ve post.php dosyalarımızı siteye yüklememiz gerekiyor.
+ Web Sitemiz Hazır! https://inst4grarn.000webhost.com/# Kullanıcı bu siteye giriş sağladığında fake instagram panel açılacaktır.
+ Kullanıcı bilgilerini bu siteye giriş yaptığında ise https://inst4grarn.000webhost.com/password.html 
+ adresi üzerinden oltaladığınız tüm kullanıcı bilgileri gözükecektir.
+
+
+	SOCIAL MEDIA SECURITY
+ Kompleks şifrelre koyma
+ Bruteforce'a Karşı Korunmak.
+ Farklı linklerden uzak durma
+ Two Factor Authentication

