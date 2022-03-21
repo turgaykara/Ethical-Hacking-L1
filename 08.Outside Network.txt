@@ -52,7 +52,7 @@ sessions -2	-> Bu session'ın içine girecektir. İşe yaramaz ise -> sessions -
 
 
 	VEIL ile Backdoor oluşturma
-	Veil'ı çalıştıramadık boşver zaten msfvenomla da yapabiliyoz boş yapma.
+	Veil'ı çalıştıramadık, msfvenom da işimizi görecektir.
 cd Downloads/
 ./ngrok tcp 4242
 
