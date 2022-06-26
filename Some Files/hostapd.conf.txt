@@ -1,0 +1,11 @@
+#interface'i yaz
+interface=wlan0
+
+#Yayınlayacağımız ağ ismini seç.
+ssid=hotel wifi v2
+
+#Hangi kanalda yayın yapılacağını seç
+channel=3
+
+#Sürücü
+#driver=nl80211
