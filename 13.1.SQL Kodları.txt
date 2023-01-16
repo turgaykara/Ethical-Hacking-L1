@@ -13,12 +13,3 @@ SELECT * FROM demo WHERE name = "Turgay";				-> Sadece ismi Turgay olan sütunu 
 
 SELECT * FROM demo WHERE name LIKE "S%";				-> "S%" = S ile başlayan tüm değerleri göster.
 									-> "%S" = S ile biten tüm değerleri göster.
-
-
-
-
-
-
-
-
-
