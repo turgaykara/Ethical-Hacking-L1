@@ -1,0 +1,27 @@
+Kanıt Toplamak
+---------------------------------------------------------------------------------------------------------------
+https://osintframework.com	#-> Açık kaynak istihbaratını takip edebilmek için geliştirilmiş bir araç.
+
+https://builtwith.com		#-> Web sitelerinin kullandığı teknolojiyi detaylı şekilde açıklar.
+
+
+
+ Konum Tespiti:
+---------------------------------------------------------------------------------------------------------------
+
+https://www.shodan.io		#-> IP adreslerinin kullandığı protokolleri gösterir.
+
+https://tineye.com		#-> Görseli internet üzerinden aratmak için kullanılır.
+https://pimeyes.com/en		#-> Aynısının ücretli alternatifi
+
+https://pixelied.com/features/unblur-image	#-> Net görünemeyen görselleri görülebilir hale getirir.
+
+http://www.worldlicenseplates.com		#-> Tüm ülkelerin plaka şablonlarını gösterir.
+
+https://www.flightradar24.com	#-> Anlık olarak Uçakların hangi rotasyon üzerinden uçtuğunu gösterir.
+https://tr.flightaware.com	#-> Dünya geneli uçuş takibi
+
+
+
+	AI Hacking
+--------------------------------------------------------------------------------------------------------------
